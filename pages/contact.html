@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>Contact — Studio</title>
+  <meta name="description" content="Get in touch for product design leadership, advisory, and creative collaborations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body data-page="contact">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <header class="nav" role="banner">
+    <a class="nav__logo" href="../index.html" data-logo title="Click 5 times for a small secret">
+      <span class="nav__mark">◐</span>
+      <span class="nav__name">Studio</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="work.html" data-cursor="view">Work</a>
+      <a href="writing.html" data-cursor="read">Writing</a>
+      <a href="experiments.html" data-cursor="play">Experiments</a>
+      <a href="about.html" data-cursor="view">About</a>
+      <a href="contact.html" data-cursor="open" class="is-active">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="nav__theme-btn" data-theme-toggle title="Cycle Paper / Clay / Nocturne themes">◐ Paper</button>
+      <button class="nav__mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="page-hero__meta">Initiate Dialogue</div>
+      <h1 class="page-hero__title">Let's start a conversation.</h1>
+      <p class="page-hero__sub">
+        Whether you're scoping an ambitious new product, rethinking a complex enterprise workflow, or exploring AI interaction patterns — drop a note.
+      </p>
+    </section>
+
+    <section class="contact-grid">
+      <!-- Left Column: Details & Direct Email -->
+      <div class="contact-info">
+        <h2>Direct Channel</h2>
+        <p>I read and reply to every message personally. For quick inquiries, click below to copy the address directly to your clipboard:</p>
+
+        <div class="email-box" id="copyEmailBtn" data-cursor="open" role="button" tabindex="0" title="Click to copy email address">
+          <span id="emailAddress">hello@studio.example</span>
+          <span class="copy-icon">📋 Copy</span>
+        </div>
+
+        <div class="contact-details">
+          <div class="contact-detail-row">
+            <span>Location</span>
+            <strong>San Francisco, CA (PST / UTC-8)</strong>
+          </div>
+          <div class="contact-detail-row">
+            <span>Status</span>
+            <strong style="color:var(--moss);">● Available for select Q3/Q4 engagements</strong>
+          </div>
+          <div class="contact-detail-row">
+            <span>Response</span>
+            <strong>Usually within 24–48 hours</strong>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+          <span style="display:block; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-muted); margin-bottom:12px;">Elsewhere</span>
+          <div style="display:flex; gap:16px; font-weight:500;">
+            <a href="https://linkedin.com" target="_blank" rel="noopener" data-cursor="open" style="text-decoration:underline;">LinkedIn</a>
+            <a href="https://github.com" target="_blank" rel="noopener" data-cursor="open" style="text-decoration:underline;">GitHub</a>
+            <a href="https://x.com" target="_blank" rel="noopener" data-cursor="open" style="text-decoration:underline;">X / Twitter</a>
+            <a href="https://dribbble.com" target="_blank" rel="noopener" data-cursor="open" style="text-decoration:underline;">Dribbble</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Form -->
+      <form class="contact-form" id="contactForm">
+        <div class="form-group">
+          <label>I'm inquiring about:</label>
+          <div class="topic-pills" id="topicPills">
+            <button type="button" class="topic-pill is-selected" data-topic="Product Design">Product Design</button>
+            <button type="button" class="topic-pill" data-topic="AI Interaction">AI Interaction</button>
+            <button type="button" class="topic-pill" data-topic="Design Systems">Design Systems</button>
+            <button type="button" class="topic-pill" data-topic="Advisory">Advisory</button>
+            <button type="button" class="topic-pill" data-topic="Just Saying Hi">Just Saying Hi</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nameInput">Your Name</label>
+          <input type="text" id="nameInput" class="form-input" placeholder="Maya Lin" required />
+        </div>
+
+        <div class="form-group">
+          <label for="emailInput">Your Email</label>
+          <input type="email" id="emailInput" class="form-input" placeholder="maya@company.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="messageInput">Message / Project Context</label>
+          <textarea id="messageInput" class="form-textarea" placeholder="Tell me about what you're working on, timeline, and what success looks like..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--magnetic" data-cursor="open" style="align-self: flex-start; margin-top:8px;">
+          Send Transmission →
+        </button>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <p>© <span id="year"></span> Studio. A working portfolio.</p>
+      <p>Built with restraint.</p>
+    </footer>
+  </main>
+
+  <script src="../data.js"></script>
+  <script src="../router.js"></script>
+  <script src="../app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Email Clipboard Copy
+      const copyBtn = document.getElementById('copyEmailBtn');
+      const emailText = document.getElementById('emailAddress').textContent;
+
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(emailText);
+          window.showToast("Copied hello@studio.example to clipboard!");
+        } catch (e) {
+          window.showToast("Email address: " + emailText);
+        }
+      });
+
+      // 2. Topic Pills
+      const pills = document.querySelectorAll('#topicPills .topic-pill');
+      const messageInput = document.getElementById('messageInput');
+
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('is-selected'));
+          pill.classList.add('is-selected');
+          const topic = pill.getAttribute('data-topic');
+          if (topic === 'Just Saying Hi') {
+            messageInput.placeholder = "Saying hello! Wanted to connect regarding...";
+          } else {
+            messageInput.placeholder = `Tell me about your ${topic} project, scope, and target goals...`;
+          }
+        });
+      });
+
+      // 3. Form Submission
+      const form = document.getElementById('contactForm');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('nameInput').value;
+        window.showToast(`Thank you, ${name}! Your transmission has been recorded.`);
+        form.reset();
+        pills[0].click();
+      });
+    });
+  </script>
+</body>
+</html>

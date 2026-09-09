@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>Writing — Studio</title>
+  <meta name="description" content="Essays, microcopy craft, and notes on software interaction design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body data-page="writing">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <header class="nav" role="banner">
+    <a class="nav__logo" href="../index.html" data-logo title="Click 5 times for a small secret">
+      <span class="nav__mark">◐</span>
+      <span class="nav__name">Studio</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="work.html" data-cursor="view">Work</a>
+      <a href="writing.html" data-cursor="read" class="is-active">Writing</a>
+      <a href="experiments.html" data-cursor="play">Experiments</a>
+      <a href="about.html" data-cursor="view">About</a>
+      <a href="contact.html" data-cursor="open">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="nav__theme-btn" data-theme-toggle title="Cycle Paper / Clay / Nocturne themes">◐ Paper</button>
+      <button class="nav__mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="page-hero__meta">Editorial Index</div>
+      <h1 class="page-hero__title">Writing / Notes</h1>
+      <p class="page-hero__sub">
+        Observations on cognitive momentum, probabilistic software, typographic restraint, and why the best interfaces feel inevitable.
+      </p>
+
+      <div class="filter-bar" id="topicFilter">
+        <button class="filter-btn is-active" data-topic="all">All Notes</button>
+        <button class="filter-btn" data-topic="Design Philosophy">Design Philosophy</button>
+        <button class="filter-btn" data-topic="AI & Interaction">AI & Interaction</button>
+        <button class="filter-btn" data-topic="Writing & Content">Writing & Content</button>
+        <button class="filter-btn" data-topic="Data UX">Data UX</button>
+      </div>
+    </section>
+
+    <section class="preview" style="border-top:none; padding-top:0;">
+      <ul class="articles" id="articlesList"></ul>
+    </section>
+
+    <footer class="foot">
+      <p>© <span id="year"></span> Studio. A working portfolio.</p>
+      <p>Built with restraint.</p>
+    </footer>
+  </main>
+
+  <script src="../data.js"></script>
+  <script src="../router.js"></script>
+  <script src="../app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const list = document.getElementById('articlesList');
+      const filterBtns = document.querySelectorAll('#topicFilter .filter-btn');
+      const articles = window.STUDIO.articles;
+
+      function renderArticles(topic = 'all') {
+        const filtered = topic === 'all'
+          ? articles
+          : articles.filter(a => a.tag === topic);
+
+        list.innerHTML = filtered.map(art => `
+          <li class="article-row">
+            <a href="article.html?a=${art.slug}" data-cursor="read">
+              <span class="article-row__date">${art.date}</span>
+              <div>
+                <span class="article-row__title">${art.title}</span>
+                <p style="font-size:0.95rem; color:var(--ink-light); margin-top:6px; max-width:640px;">${art.excerpt}</p>
+              </div>
+              <div class="article-row__meta">
+                <span class="tag-pill">${art.tag}</span>
+                <span>${art.read}</span>
+              </div>
+            </a>
+          </li>
+        `).join('');
+
+        if (window.refreshCursorEvents) window.refreshCursorEvents();
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          renderArticles(btn.getAttribute('data-topic'));
+        });
+      });
+
+      renderArticles('all');
+    });
+  </script>
+</body>
+</html>

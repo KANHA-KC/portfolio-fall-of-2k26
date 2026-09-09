@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>Studio — Designer, Writer, Product Thinker</title>
+  <meta name="description" content="I turn complex ideas into simple, intuitive experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <header class="nav" role="banner">
+    <a class="nav__logo" href="index.html" data-logo title="Click 5 times for a small secret">
+      <span class="nav__mark">◐</span>
+      <span class="nav__name">Studio</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="pages/work.html" data-cursor="view">Work</a>
+      <a href="pages/writing.html" data-cursor="read">Writing</a>
+      <a href="pages/experiments.html" data-cursor="play">Experiments</a>
+      <a href="pages/about.html" data-cursor="view">About</a>
+      <a href="pages/contact.html" data-cursor="open">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="nav__theme-btn" data-theme-toggle title="Cycle Paper / Clay / Nocturne themes">◐ Paper</button>
+      <button class="nav__mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero__meta">
+        <span class="status-pill"><span class="status-dot"></span> Available for select Q3/Q4 work</span>
+        <span>UI/UX Design</span>
+        <span>Product</span>
+        <span>Writing</span>
+        <span>Experiments</span>
+      </div>
+
+      <h1 class="hero__title">
+        <span class="line"><span>Designing</span></span>
+        <span class="line"><span>ideas into</span></span>
+        <span class="line"><span><em>experiences.</em></span></span>
+      </h1>
+
+      <p class="hero__lede">
+        UI/UX designer, product thinker and writer exploring the space between
+        people, technology and ideas.
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="pages/work.html" data-cursor="view">Explore my work</a>
+        <a class="btn btn--ghost" href="pages/about.html" data-cursor="view">About me</a>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true">
+        <span>Scroll to explore</span>
+        <span class="hero__arrow">↓</span>
+      </div>
+    </section>
+
+    <section class="intro">
+      <p class="intro__lede">
+        <span class="line">I like solving problems</span>
+        <span class="line">that don't have obvious answers.</span>
+      </p>
+      <div class="intro__body">
+        <p>I design digital experiences, products and systems — while constantly writing, experimenting and building things to understand how they work.</p>
+      </div>
+
+      <ol class="stack" id="stack">
+        <li class="stack__card">
+          <div class="stack__face">
+            <span>01</span>
+            <strong>Think</strong>
+          </div>
+          <p>Understand the problem before designing the interface.</p>
+        </li>
+        <li class="stack__card">
+          <div class="stack__face">
+            <span>02</span>
+            <strong>Design</strong>
+          </div>
+          <p>Turn complexity into clear, usable experiences.</p>
+        </li>
+        <li class="stack__card">
+          <div class="stack__face">
+            <span>03</span>
+            <strong>Write</strong>
+          </div>
+          <p>Use words as part of the interface.</p>
+        </li>
+        <li class="stack__card">
+          <div class="stack__face">
+            <span>04</span>
+            <strong>Build</strong>
+          </div>
+          <p>Prototype ideas instead of only talking about them.</p>
+        </li>
+        <li class="stack__card">
+          <div class="stack__face">
+            <span>05</span>
+            <strong>Iterate</strong>
+          </div>
+          <p>Make, test, learn and make again.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="preview">
+      <header class="section-head">
+        <span class="section-head__index">§01</span>
+        <h2 class="section-head__title">Selected work</h2>
+        <p class="section-head__sub">Some things I've designed, explored and built.</p>
+      </header>
+      <div class="preview__grid" id="previewGrid"></div>
+      <a class="preview__more" href="pages/work.html" data-cursor="view">View all work →</a>
+    </section>
+
+    <section class="principles">
+      <header class="section-head">
+        <span class="section-head__index">§02</span>
+        <h2 class="section-head__title">How I think</h2>
+        <p class="section-head__sub">A working set of principles. Tap one to open.</p>
+      </header>
+      <ul class="principles__list" id="principles"></ul>
+    </section>
+
+    <section class="preview">
+      <header class="section-head">
+        <span class="section-head__index">§03</span>
+        <h2 class="section-head__title">Writing / Notes</h2>
+        <p class="section-head__sub">Things I'm thinking about.</p>
+      </header>
+      <ul class="articles articles--preview" id="articlesPreview"></ul>
+      <a class="preview__more" href="pages/writing.html" data-cursor="read">All writing →</a>
+    </section>
+
+    <footer class="foot">
+      <p>© <span id="year"></span> Studio. A working portfolio.</p>
+      <p>Built with restraint.</p>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="router.js"></script>
+  <script src="app.js"></script>
+  <script type="module" src="scene.js"></script>
+</body>
+</html>

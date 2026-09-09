@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>Experiments — Studio</title>
+  <meta name="description" content="Tactile micro-interactions, generative art, and creative code prototypes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body data-page="experiments">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <header class="nav" role="banner">
+    <a class="nav__logo" href="../index.html" data-logo title="Click 5 times for a small secret">
+      <span class="nav__mark">◐</span>
+      <span class="nav__name">Studio</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="work.html" data-cursor="view">Work</a>
+      <a href="writing.html" data-cursor="read">Writing</a>
+      <a href="experiments.html" data-cursor="play" class="is-active">Experiments</a>
+      <a href="about.html" data-cursor="view">About</a>
+      <a href="contact.html" data-cursor="open">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="nav__theme-btn" data-theme-toggle title="Cycle Paper / Clay / Nocturne themes">◐ Paper</button>
+      <button class="nav__mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="page-hero__meta">Sandbox & Creative Code</div>
+      <h1 class="page-hero__title">The Experiments Bench.</h1>
+      <p class="page-hero__sub">
+        Tactile micro-interactions, generative vector contours, kinetic physics, and editorial tools built to understand software behavior from first principles.
+      </p>
+    </section>
+
+    <section class="bench-grid">
+      <!-- Experiment 1: Kinetic Variable Type -->
+      <article class="bench-card" data-cursor="play">
+        <div class="bench-card__viewport">
+          <div class="kinetic-box" title="Drag to displace">
+            Resonance
+          </div>
+        </div>
+        <div class="bench-card__body">
+          <div class="bench-card__meta">
+            <span>2024.08</span>
+            <span class="tag-pill">Typography / Math</span>
+          </div>
+          <h2 class="bench-card__title">Kinetic Variable Type</h2>
+          <p class="bench-card__desc">Click and drag inside the frame to bend typography velocity, spring inertia, and optical size axes in real-time.</p>
+        </div>
+      </article>
+
+      <!-- Experiment 2: Tactile Paper Switch -->
+      <article class="bench-card" data-cursor="play">
+        <div class="bench-card__viewport">
+          <div class="switch-box">
+            <div class="tactile-lever" role="switch" aria-checked="false" tabindex="0">
+              <div class="tactile-knob"></div>
+            </div>
+            <span class="switch-status">State: Resting (0N)</span>
+          </div>
+        </div>
+        <div class="bench-card__body">
+          <div class="bench-card__meta">
+            <span>2024.06</span>
+            <span class="tag-pill">Physics / Spring</span>
+          </div>
+          <h2 class="bench-card__title">Tactile Paper Lever</h2>
+          <p class="bench-card__desc">A micro-switch simulating physical lever resistance, paper friction, and cubic-bezier spring overshoot upon release.</p>
+        </div>
+      </article>
+
+      <!-- Experiment 3: Generative Noise Canvas -->
+      <article class="bench-card" data-cursor="play">
+        <div class="bench-card__viewport">
+          <canvas id="noiseCanvas"></canvas>
+        </div>
+        <div class="bench-card__body">
+          <div class="bench-card__meta">
+            <span>2024.05</span>
+            <span class="tag-pill">Canvas / Math</span>
+          </div>
+          <h2 class="bench-card__title">Organic Clay Contours</h2>
+          <p class="bench-card__desc">Procedural mathematical vector flow field generating real-time topographic ripples that bend toward cursor mass.</p>
+        </div>
+      </article>
+
+      <!-- Experiment 4: The Microcopy Oracle -->
+      <article class="bench-card" data-cursor="play">
+        <div class="bench-card__viewport">
+          <div class="oracle-box">
+            <input type="text" class="oracle-input" placeholder="Type jargon: e.g. synergy, bandwidth, leverage" />
+            <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">
+              <button type="button" class="tag-pill oracle-chip" data-word="bandwidth">bandwidth</button>
+              <button type="button" class="tag-pill oracle-chip" data-word="synergy">synergy</button>
+              <button type="button" class="tag-pill oracle-chip" data-word="deep dive">deep dive</button>
+              <button type="button" class="tag-pill oracle-chip" data-word="paradigm shift">paradigm shift</button>
+            </div>
+            <div class="oracle-output">“Type or tap corporate jargon to clarify.”</div>
+          </div>
+        </div>
+        <div class="bench-card__body">
+          <div class="bench-card__meta">
+            <span>2024.04</span>
+            <span class="tag-pill">Writing / Clarity</span>
+          </div>
+          <h2 class="bench-card__title">The Microcopy Oracle</h2>
+          <p class="bench-card__desc">A quick microcopy filter that decodes enterprise corporate buzzwords into plain, honest, and calming human sentences.</p>
+        </div>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <p>© <span id="year"></span> Studio. A working portfolio.</p>
+      <p>Built with restraint.</p>
+    </footer>
+  </main>
+
+  <script src="../data.js"></script>
+  <script src="../router.js"></script>
+  <script src="../app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.querySelector('.oracle-input');
+      const chips = document.querySelectorAll('.oracle-chip');
+      if (input && chips) {
+        chips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            input.value = chip.getAttribute('data-word');
+            input.dispatchEvent(new Event('input'));
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
