@@ -31,8 +31,10 @@ export default function Navbar() {
     if (saved && THEMES.includes(saved)) {
       setTheme(saved);
       document.documentElement.setAttribute('data-theme', saved);
+      window.dispatchEvent(new CustomEvent('theme-change', { detail: saved }));
     } else {
       document.documentElement.setAttribute('data-theme', 'paper');
+      window.dispatchEvent(new CustomEvent('theme-change', { detail: 'paper' }));
     }
   }, []);
 
@@ -45,6 +47,7 @@ export default function Navbar() {
     setTheme(nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('studio_theme', nextTheme);
+    window.dispatchEvent(new CustomEvent('theme-change', { detail: nextTheme }));
     showToast(`Theme switched to ${nextTheme.toUpperCase()}`);
   };
 
