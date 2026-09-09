@@ -9,9 +9,9 @@ import { ThemeMode } from '@/lib/types';
 
 const THEMES: ThemeMode[] = ['paper', 'clay', 'dark'];
 const THEME_LABELS: Record<ThemeMode, string> = {
-  paper: '◐ Paper',
-  clay: '◐ Clay',
-  dark: '◐ Nocturne',
+  paper: '◐ Olive & Linen',
+  clay: '◐ Terracotta',
+  dark: '◐ Deep Forest',
 };
 
 export default function Navbar() {
