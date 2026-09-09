@@ -32,29 +32,77 @@ export async function generateMetadata({
   };
 }
 
-function parseMarkdownBlock(block: string) {
-  if (block.startsWith('### ')) {
-    return <h3>{block.replace('### ', '')}</h3>;
-  }
-  if (block.startsWith('1. ') || block.startsWith('- ')) {
-    const text = block.replace(/^[0-9]+\.\s*|-\s*/, '');
-    return (
-      <p style={{ marginLeft: '18px', marginBottom: '12px' }}>
-        • {parseInlineBold(text)}
-      </p>
-    );
-  }
-  return <p>{parseInlineBold(block)}</p>;
+function parseInlineFormatting(text: string): React.ReactNode[] {
+  const tokens = text.split(/(\*\*.*?\*\*|`.*?`)/g);
+  return tokens.map((tok, i) => {
+    if (tok.startsWith('**') && tok.endsWith('**')) {
+      return <strong key={i}>{tok.slice(2, -2)}</strong>;
+    }
+    if (tok.startsWith('`') && tok.endsWith('`')) {
+      return <code key={i}>{tok.slice(1, -1)}</code>;
+    }
+    return tok;
+  });
 }
 
-function parseInlineBold(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
+function renderArticleBlocks(blocks: string[]) {
+  const elements: React.ReactNode[] = [];
+  let currentList: { type: 'ol' | 'ul'; items: string[] } | null = null;
+
+  const flushList = () => {
+    if (!currentList) return;
+    const ListTag = currentList.type;
+    elements.push(
+      <ListTag key={`list-${elements.length}`}>
+        {currentList.items.map((item, idx) => (
+          <li key={idx}>{parseInlineFormatting(item)}</li>
+        ))}
+      </ListTag>
+    );
+    currentList = null;
+  };
+
+  blocks.forEach((block, idx) => {
+    if (block.startsWith('### ')) {
+      flushList();
+      elements.push(
+        <h3 key={`h3-${idx}`}>
+          {parseInlineFormatting(block.replace('### ', ''))}
+        </h3>
+      );
+      return;
     }
-    return part;
+
+    const numMatch = block.match(/^\d+\.\s+(.*)/);
+    if (numMatch) {
+      if (currentList && currentList.type !== 'ol') {
+        flushList();
+      }
+      if (!currentList) {
+        currentList = { type: 'ol', items: [] };
+      }
+      currentList.items.push(numMatch[1]);
+      return;
+    }
+
+    const bulletMatch = block.match(/^[-*]\s+(.*)/);
+    if (bulletMatch) {
+      if (currentList && currentList.type !== 'ul') {
+        flushList();
+      }
+      if (!currentList) {
+        currentList = { type: 'ul', items: [] };
+      }
+      currentList.items.push(bulletMatch[1]);
+      return;
+    }
+
+    flushList();
+    elements.push(<p key={`p-${idx}`}>{parseInlineFormatting(block)}</p>);
   });
+
+  flushList();
+  return elements;
 }
 
 export default function ArticleDetailPage({ params }: PageProps) {
@@ -100,12 +148,10 @@ export default function ArticleDetailPage({ params }: PageProps) {
         </div>
 
         <h1 className="article-reader__title">{article.title}</h1>
-        <p className="article-reader__lede">{article.excerpt}</p>
+        <p className="article-reader__excerpt">{article.excerpt}</p>
 
-        <div className="article-reader__content">
-          {article.body.map((block, idx) => (
-            <React.Fragment key={idx}>{parseMarkdownBlock(block)}</React.Fragment>
-          ))}
+        <div className="article-reader__body">
+          {renderArticleBlocks(article.body)}
         </div>
 
         <div
@@ -130,13 +176,24 @@ export default function ArticleDetailPage({ params }: PageProps) {
           <Link href="/writing" className="btn btn--ghost" data-cursor="read">
             ← All Writing
           </Link>
-          <Link
-            href={`/writing/${nextArticle.slug}`}
-            className="btn btn--primary"
-            data-cursor="read"
-          >
-            Next Note: {nextArticle.title} →
-          </Link>
+          <div className="next-nav-item">
+            <Link
+              href={`/writing/${nextArticle.slug}`}
+              className="btn btn--primary"
+              data-cursor="read"
+              aria-label={`Next note: ${nextArticle.title}`}
+            >
+              Next →
+            </Link>
+            <div className="next-hover-preview" aria-hidden="true">
+              <span className="next-hover-preview__label">
+                Next Note • {nextArticle.read}
+              </span>
+              <span className="next-hover-preview__title">
+                {nextArticle.title}
+              </span>
+            </div>
+          </div>
         </nav>
       </article>
     </>

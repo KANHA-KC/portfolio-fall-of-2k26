@@ -133,13 +133,24 @@ export default function ProjectCaseStudyPage({ params }: PageProps) {
           <Link href="/work" className="btn btn--ghost" data-cursor="view">
             ← All Work
           </Link>
-          <Link
-            href={`/work/${nextProject.slug}`}
-            className="btn btn--primary"
-            data-cursor="view"
-          >
-            Next: {nextProject.title} →
-          </Link>
+          <div className="next-nav-item">
+            <Link
+              href={`/work/${nextProject.slug}`}
+              className="btn btn--primary"
+              data-cursor="view"
+              aria-label={`Next project: ${nextProject.title}`}
+            >
+              Next →
+            </Link>
+            <div className="next-hover-preview" aria-hidden="true">
+              <span className="next-hover-preview__label">
+                Next Project • §{nextProject.n}
+              </span>
+              <span className="next-hover-preview__title">
+                {nextProject.title}
+              </span>
+            </div>
+          </div>
         </nav>
       </article>
     </>

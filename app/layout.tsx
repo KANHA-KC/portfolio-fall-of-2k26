@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { Fraunces, Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -20,6 +20,13 @@ const inter = Inter({
   weight: ['300', '400', '500', '600'],
 });
 
+const instagramSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-instagram-sans',
+  weight: ['400', '500', '600', '700'],
+});
+
 export const metadata: Metadata = {
   title: 'Studio — Designer, Writer, Product Thinker',
   description: 'I turn complex ideas into simple, intuitive experiences.',
@@ -31,6 +38,9 @@ export const metadata: Metadata = {
     'Design Engineering',
   ],
   authors: [{ name: 'Studio' }],
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export const viewport: Viewport = {
@@ -49,7 +59,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="paper"
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${instagramSans.variable}`}
     >
       <body>
         <a className="skip-link" href="#main">
