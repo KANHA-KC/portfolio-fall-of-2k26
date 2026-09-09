@@ -26,9 +26,12 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
           models can be transformed into calm, guided human workflows.
         </p>
 
-        <div className="filter-bar" id="filterBar" role="tablist">
+        <div className="filter-bar" id="filterBar" role="tablist" aria-label="Filter project categories">
           <button
             type="button"
+            role="tab"
+            aria-selected={filter === 'all'}
+            aria-controls="workGrid"
             className={`filter-btn ${filter === 'all' ? 'is-active' : ''}`}
             onClick={() => setFilter('all')}
           >
@@ -36,6 +39,9 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={filter === 'ai'}
+            aria-controls="workGrid"
             className={`filter-btn ${filter === 'ai' ? 'is-active' : ''}`}
             onClick={() => setFilter('ai')}
           >
@@ -43,6 +49,9 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={filter === 'data'}
+            aria-controls="workGrid"
             className={`filter-btn ${filter === 'data' ? 'is-active' : ''}`}
             onClick={() => setFilter('data')}
           >
@@ -50,6 +59,9 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={filter === 'healthcare'}
+            aria-controls="workGrid"
             className={`filter-btn ${filter === 'healthcare' ? 'is-active' : ''}`}
             onClick={() => setFilter('healthcare')}
           >

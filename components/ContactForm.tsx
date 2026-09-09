@@ -83,6 +83,7 @@ export default function ContactForm() {
           data-cursor="open"
           role="button"
           tabIndex={0}
+          aria-label="Copy email address hello@studio.example"
           title="Click to copy email address"
           onClick={handleCopyEmail}
           onKeyDown={(e) => {
@@ -93,7 +94,7 @@ export default function ContactForm() {
           }}
         >
           <span id="emailAddress">hello@studio.example</span>
-          <span className="copy-icon">📋 Copy</span>
+          <span className="copy-icon" aria-hidden="true">📋 Copy</span>
         </div>
 
         <div className="contact-details">
@@ -171,12 +172,19 @@ export default function ContactForm() {
       {/* Right Column: Interactive Form */}
       <form className="contact-form" id="contactForm" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>I&apos;m inquiring about:</label>
-          <div className="topic-pills" id="topicPills">
+          <label id="topicGroupLabel">I&apos;m inquiring about:</label>
+          <div
+            className="topic-pills"
+            id="topicPills"
+            role="radiogroup"
+            aria-labelledby="topicGroupLabel"
+          >
             {TOPICS.map((topic) => (
               <button
                 key={topic}
                 type="button"
+                role="radio"
+                aria-checked={selectedTopic === topic}
                 className={`topic-pill ${selectedTopic === topic ? 'is-selected' : ''}`}
                 onClick={() => setSelectedTopic(topic)}
               >
@@ -241,11 +249,13 @@ export default function ContactForm() {
           >
             {submitting ? 'Transmitting...' : 'Send Transmission →'}
           </button>
-          {submitted && (
-            <span style={{ color: 'var(--moss)', fontSize: '0.9rem', fontWeight: 500 }}>
-              ✓ Sent successfully
-            </span>
-          )}
+          <div aria-live="polite" aria-atomic="true">
+            {submitted && (
+              <span style={{ color: 'var(--moss)', fontSize: '0.9rem', fontWeight: 500 }}>
+                ✓ Sent successfully
+              </span>
+            )}
+          </div>
         </div>
       </form>
     </section>

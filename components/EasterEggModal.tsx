@@ -64,13 +64,14 @@ export default function EasterEggModal({ isOpen, onClose }: EasterEggModalProps)
       className="easter-modal is-active"
       role="dialog"
       aria-modal="true"
+      aria-labelledby="easterTitle"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div className="easter-card">
         <div style={{ fontSize: '2.8rem', marginBottom: '12px' }}>🌱 ☕️ ✦</div>
-        <h3>Curiosity Rewarded</h3>
+        <h3 id="easterTitle">Curiosity Rewarded</h3>
         <p>
           You found the workshop backdoor. Software is best when built with equal parts restraint, curiosity, and warmth.
         </p>

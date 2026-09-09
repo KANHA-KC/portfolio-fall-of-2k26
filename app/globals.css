@@ -18,7 +18,7 @@
   /* Text & Ink: Espresso (#2B2625) */
   --ink: #2b2625;
   --ink-light: #524a47;
-  --ink-muted: #7d726d;
+  --ink-muted: #6c625e;
   --ink-faint: rgba(43, 38, 37, 0.06);
 
   /* 30% Structural: Olive Green (#556B2F) */
@@ -29,23 +29,23 @@
   --moss: #556b2f;
   --moss-subtle: rgba(85, 107, 47, 0.12);
 
-  /* 10% Accent: Terracotta / Rust (#C86D51) */
-  --terracotta: #c86d51;
-  --terracotta-hover: #b55b3f;
-  --terracotta-subtle: rgba(200, 109, 81, 0.12);
-  --clay: #c86d51;
-  --clay-hover: #b55b3f;
-  --clay-subtle: rgba(200, 109, 81, 0.12);
-  --sand: #7d726d;
+  /* 10% Accent: Terracotta / Rust (#BA5B3D calibrated for WCAG AA 4.5:1 contrast) */
+  --terracotta: #ba5b3d;
+  --terracotta-hover: #a84e32;
+  --terracotta-subtle: rgba(186, 91, 61, 0.12);
+  --clay: #ba5b3d;
+  --clay-hover: #a84e32;
+  --clay-subtle: rgba(186, 91, 61, 0.12);
+  --sand: #6c625e;
 
   /* Borders & Dividers */
   --border-subtle: #e2ddd3;
   --border-medium: #cec6b8;
-  --border-focus: #c86d51;
+  --border-focus: #ba5b3d;
 
   /* Apple Token Mappings & Aliases */
-  --apple-primary: #c86d51;          /* Terracotta CTA */
-  --apple-primary-focus: #b55b3f;
+  --apple-primary: #ba5b3d;          /* Terracotta CTA */
+  --apple-primary-focus: #a84e32;
   --apple-primary-dark: #e08569;
   --apple-ink: #2b2625;              /* Espresso text */
   --apple-body: #2b2625;
@@ -223,10 +223,11 @@ img {
   display: block;
 }
 
-/* Focus styles */
+/* Focus styles (Apple HIG Keyboard Navigation & Focus Ring) */
 :focus-visible {
-  outline: 2px solid var(--clay);
+  outline: 2px solid var(--terracotta);
   outline-offset: 3px;
+  border-radius: inherit;
 }
 
 /* ==========================================================================
@@ -443,11 +444,12 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  min-height: 40px;
+  padding: 8px 16px;
   border-radius: 999px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--ink);
   transition: all var(--transition-fast);
@@ -515,11 +517,12 @@ img {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px 22px;
-  font-size: 17px;
-  font-weight: 400;
+  min-height: 44px;
+  padding: 11px 24px;
+  font-size: 1.0625rem;
+  font-weight: 500;
   line-height: 1.47;
-  letter-spacing: -0.374px;
+  letter-spacing: -0.022em;
   border-radius: 9999px;
   transition: transform 140ms var(--ease-out), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
   text-decoration: none;
@@ -548,11 +551,12 @@ img {
   transition: transform 80ms cubic-bezier(0, 0, 0.2, 1) !important;
 }
 
-/* button-primary: Terracotta / Rust (#C86D51) CTA, White text, full pill, active scale(0.95) */
+/* button-primary: Terracotta / Rust (#BA5B3D) CTA, White text, full pill, active scale(0.95) */
 .btn--primary {
   background: var(--terracotta);
   color: #ffffff;
   border: 1px solid var(--terracotta);
+  font-weight: 500;
 }
 
 .btn--primary:hover {
@@ -583,8 +587,9 @@ img {
 
 [data-theme="dark"] .btn--primary {
   background: var(--terracotta);
-  color: #ffffff;
+  color: #12180f;
   border-color: var(--terracotta);
+  font-weight: 600;
 }
 
 [data-theme="dark"] .btn--ghost {
@@ -602,7 +607,9 @@ img {
 }
 
 .tag-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -1175,13 +1182,18 @@ main {
 }
 
 .filter-btn {
-  padding: 8px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 22px;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 500;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--ink-light);
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
@@ -1904,11 +1916,17 @@ main {
 }
 
 .topic-pill {
-  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 16px;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   background: var(--bg-paper-subtle);
   border: 1px solid var(--border-subtle);
+  color: var(--ink);
   cursor: pointer;
   transition: all var(--transition-fast);
 }

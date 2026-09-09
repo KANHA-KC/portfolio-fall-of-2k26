@@ -34,11 +34,14 @@ export default function WritingFilterList({ articles }: WritingFilterListProps) 
           typographic restraint, and why the best interfaces feel inevitable.
         </p>
 
-        <div className="filter-bar" id="topicFilter" role="tablist">
+        <div className="filter-bar" id="topicFilter" role="tablist" aria-label="Filter writing topics">
           {TOPICS.map((topic) => (
             <button
               key={topic}
               type="button"
+              role="tab"
+              aria-selected={selectedTopic === topic}
+              aria-controls="articlesList"
               className={`filter-btn ${selectedTopic === topic ? 'is-active' : ''}`}
               onClick={() => setSelectedTopic(topic)}
             >

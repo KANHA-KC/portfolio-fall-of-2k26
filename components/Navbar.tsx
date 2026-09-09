@@ -108,6 +108,7 @@ export default function Navbar() {
                 href={link.href}
                 data-cursor={link.cursor}
                 className={isActive ? 'is-active' : ''}
+                aria-current={isActive ? 'page' : undefined}
                 onClick={closeMobile}
               >
                 {link.label}

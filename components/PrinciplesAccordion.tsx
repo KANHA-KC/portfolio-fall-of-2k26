@@ -23,18 +23,25 @@ export default function PrinciplesAccordion({ principles }: PrinciplesAccordionP
         return (
           <li key={pr.n} className={`principle-item ${isOpen ? 'is-open' : ''}`}>
             <button
+              id={`principle-header-${idx}`}
               className="principle-item__header"
               type="button"
               aria-expanded={isOpen}
+              aria-controls={`principle-panel-${idx}`}
               onClick={() => toggleIndex(idx)}
             >
               <div className="principle-item__left">
                 <span className="principle-item__num">{pr.n}</span>
                 <span className="principle-item__title">{pr.t}</span>
               </div>
-              <span className="principle-item__icon">+</span>
+              <span className="principle-item__icon" aria-hidden="true">+</span>
             </button>
-            <div className="principle-item__content">
+            <div
+              id={`principle-panel-${idx}`}
+              className="principle-item__content"
+              role="region"
+              aria-labelledby={`principle-header-${idx}`}
+            >
               <p>{pr.d}</p>
             </div>
           </li>
