@@ -1,15 +1,171 @@
+'use client';
+
+import React, { useRef } from 'react';
 import Link from 'next/link';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import HeroScene from '@/components/HeroScene';
 import PrinciplesAccordion from '@/components/PrinciplesAccordion';
 import { getProjects, getPrinciples, getArticles } from '@/lib/data';
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 export default function HomePage() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const projects = getProjects().slice(0, 2);
   const principles = getPrinciples();
   const articles = getArticles().slice(0, 3);
 
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // 1. Hero Entrance Timeline
+        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        heroTl
+          .fromTo(
+            '.hero__meta span',
+            { opacity: 0, y: -8 },
+            { opacity: 1, y: 0, stagger: 0.06, duration: 0.6 }
+          )
+          .fromTo(
+            '.hero__title .line span',
+            { yPercent: 120, opacity: 0 },
+            { yPercent: 0, opacity: 1, stagger: 0.12, duration: 0.95, ease: 'power4.out' },
+            '-=0.35'
+          )
+          .fromTo(
+            '.hero__lede',
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.75 },
+            '-=0.55'
+          )
+          .fromTo(
+            '.hero__cta .btn',
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 },
+            '-=0.45'
+          )
+          .fromTo(
+            '.hero__scroll',
+            { opacity: 0 },
+            { opacity: 1, duration: 0.8 },
+            '-=0.2'
+          );
+
+        // 2. Intro Section ScrollTrigger
+        gsap.fromTo(
+          '.intro__lede .line',
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.12,
+            duration: 0.85,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.intro',
+              start: 'top 82%',
+            },
+          }
+        );
+
+        gsap.fromTo(
+          '.intro__body p',
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.intro__body',
+              start: 'top 85%',
+            },
+          }
+        );
+
+        // 3. Intro Stack Cards Stagger
+        gsap.fromTo(
+          '.stack__card',
+          { opacity: 0, y: 35, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            stagger: 0.08,
+            duration: 0.75,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.stack',
+              start: 'top 85%',
+            },
+          }
+        );
+
+        // 4. Section Headers ScrollTrigger Reveal
+        const sectionHeads = gsap.utils.toArray<HTMLElement>('.section-head');
+        sectionHeads.forEach((head) => {
+          gsap.fromTo(
+            head.children,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              stagger: 0.08,
+              duration: 0.7,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: head,
+                start: 'top 88%',
+              },
+            }
+          );
+        });
+
+        // 5. Selected Work Project Cards Stagger
+        gsap.fromTo(
+          '.preview__grid .project-card',
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.15,
+            duration: 0.85,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '#previewGrid',
+              start: 'top 85%',
+            },
+          }
+        );
+
+        // 6. Article Rows Stagger
+        gsap.fromTo(
+          '.articles--preview .article-row',
+          { opacity: 0, x: -20 },
+          {
+            opacity: 1,
+            x: 0,
+            stagger: 0.09,
+            duration: 0.65,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: '#articlesPreview',
+              start: 'top 88%',
+            },
+          }
+        );
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <>
+    <div ref={containerRef}>
       <HeroScene />
 
       <section className="hero">
@@ -199,6 +355,6 @@ export default function HomePage() {
           All writing →
         </Link>
       </section>
-    </>
+    </div>
   );
 }

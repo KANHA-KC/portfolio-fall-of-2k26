@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { OrbitNode } from '@/lib/types';
 
 interface OrbitVisualizationProps {
@@ -19,7 +20,9 @@ const DESCRIPTIONS: Record<string, string> = {
 export default function OrbitVisualization({ orbitNodes }: OrbitVisualizationProps) {
   const [statusText, setStatusText] = useState('✦ Hover an orbiting node to inspect craft depth');
   const containerRef = useRef<HTMLDivElement>(null);
-  const badgesRef = useRef<HTMLDivElement[]>([]);
+  const badgesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const speedRef = useRef({ multiplier: 1.0 });
 
   useEffect(() => {
     let animationFrameId: number;
@@ -28,7 +31,7 @@ export default function OrbitVisualization({ orbitNodes }: OrbitVisualizationPro
     const animate = () => {
       badgesRef.current.forEach((badge, i) => {
         if (!badge) return;
-        angles[i] += 0.004 * (1 - i * 0.1);
+        angles[i] += 0.0035 * (1 - i * 0.08) * speedRef.current.multiplier;
         const radius = orbitNodes[i].radius * 0.62;
         const x = Math.cos(angles[i]) * radius;
         const y = Math.sin(angles[i]) * radius;
@@ -44,6 +47,44 @@ export default function OrbitVisualization({ orbitNodes }: OrbitVisualizationPro
     };
   }, [orbitNodes]);
 
+  const handleNodeEnter = (item: OrbitNode, idx: number) => {
+    // Decelerate orbit to cinematic slow-motion
+    gsap.to(speedRef.current, { multiplier: 0.18, duration: 0.5, ease: 'power2.out' });
+
+    const badge = badgesRef.current[idx];
+    if (badge) {
+      gsap.to(badge, { scale: 1.14, duration: 0.3, ease: 'back.out(2)' });
+    }
+
+    if (statusRef.current) {
+      gsap.fromTo(
+        statusRef.current,
+        { opacity: 0, y: 4 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      );
+    }
+    setStatusText(`“${item.title}: ${DESCRIPTIONS[item.title] || 'Core studio craft focus.'}”`);
+  };
+
+  const handleNodeLeave = (idx: number) => {
+    // Restore normal orbit speed
+    gsap.to(speedRef.current, { multiplier: 1.0, duration: 0.8, ease: 'power2.inOut' });
+
+    const badge = badgesRef.current[idx];
+    if (badge) {
+      gsap.to(badge, { scale: 1.0, duration: 0.3, ease: 'power2.out' });
+    }
+
+    if (statusRef.current) {
+      gsap.fromTo(
+        statusRef.current,
+        { opacity: 0, y: 4 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      );
+    }
+    setStatusText('✦ Hover an orbiting node to inspect craft depth');
+  };
+
   return (
     <div className="orbit-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div className="orbit-container" id="orbitContainer" ref={containerRef}>
@@ -58,16 +99,12 @@ export default function OrbitVisualization({ orbitNodes }: OrbitVisualizationPro
           <div
             key={item.title}
             ref={(el) => {
-              if (el) badgesRef.current[i] = el;
+              badgesRef.current[i] = el;
             }}
             className="orbit-badge"
             data-cursor="view"
-            onMouseEnter={() =>
-              setStatusText(`“${item.title}: ${DESCRIPTIONS[item.title] || 'Core studio craft focus.'}”`)
-            }
-            onMouseLeave={() =>
-              setStatusText('✦ Hover an orbiting node to inspect craft depth')
-            }
+            onMouseEnter={() => handleNodeEnter(item, i)}
+            onMouseLeave={() => handleNodeLeave(i)}
           >
             {item.title}
           </div>
@@ -76,6 +113,7 @@ export default function OrbitVisualization({ orbitNodes }: OrbitVisualizationPro
 
       <div
         id="orbitStatus"
+        ref={statusRef}
         style={{
           fontSize: '0.88rem',
           color: 'var(--clay)',

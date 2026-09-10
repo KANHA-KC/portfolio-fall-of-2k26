@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import { gsap } from 'gsap';
+import { Flip } from 'gsap/Flip';
+import { useGSAP } from '@gsap/react';
 import { Project } from '@/lib/types';
+
+gsap.registerPlugin(Flip, useGSAP);
 
 interface WorkFilterGridProps {
   projects: Project[];
@@ -10,14 +15,60 @@ interface WorkFilterGridProps {
 
 export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
   const [filter, setFilter] = useState<'all' | 'ai' | 'data' | 'healthcare'>('all');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const flipStateRef = useRef<any>(null);
 
   const filteredProjects =
     filter === 'all'
       ? projects
       : projects.filter((p) => p.filterCategory === filter);
 
+  const handleFilterChange = (newFilter: 'all' | 'ai' | 'data' | 'healthcare') => {
+    if (newFilter === filter) return;
+    const cards = containerRef.current?.querySelectorAll('.project-card');
+    if (cards && cards.length > 0) {
+      flipStateRef.current = Flip.getState(cards);
+    }
+    setFilter(newFilter);
+  };
+
+  useGSAP(
+    () => {
+      if (flipStateRef.current) {
+        Flip.from(flipStateRef.current, {
+          duration: 0.55,
+          ease: 'power3.inOut',
+          stagger: 0.04,
+          absolute: true,
+          onEnter: (elements) =>
+            gsap.fromTo(
+              elements,
+              { opacity: 0, scale: 0.94 },
+              { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+            ),
+          onLeave: (elements) =>
+            gsap.to(elements, {
+              opacity: 0,
+              scale: 0.9,
+              duration: 0.25,
+              ease: 'power2.in',
+            }),
+        });
+        flipStateRef.current = null;
+      } else {
+        // Initial entrance stagger
+        gsap.fromTo(
+          '.project-card',
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, stagger: 0.07, duration: 0.65, ease: 'power3.out' }
+        );
+      }
+    },
+    { dependencies: [filter], scope: containerRef }
+  );
+
   return (
-    <>
+    <div ref={containerRef}>
       <section className="page-hero">
         <div className="page-hero__meta">Index of Selected Work</div>
         <h1 className="page-hero__title">Products, systems &amp; interfaces.</h1>
@@ -33,7 +84,7 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
             aria-selected={filter === 'all'}
             aria-controls="workGrid"
             className={`filter-btn ${filter === 'all' ? 'is-active' : ''}`}
-            onClick={() => setFilter('all')}
+            onClick={() => handleFilterChange('all')}
           >
             All Projects ({projects.length})
           </button>
@@ -43,7 +94,7 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
             aria-selected={filter === 'ai'}
             aria-controls="workGrid"
             className={`filter-btn ${filter === 'ai' ? 'is-active' : ''}`}
-            onClick={() => setFilter('ai')}
+            onClick={() => handleFilterChange('ai')}
           >
             AI &amp; Systems
           </button>
@@ -53,7 +104,7 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
             aria-selected={filter === 'data'}
             aria-controls="workGrid"
             className={`filter-btn ${filter === 'data' ? 'is-active' : ''}`}
-            onClick={() => setFilter('data')}
+            onClick={() => handleFilterChange('data')}
           >
             Data &amp; Dashboards
           </button>
@@ -63,7 +114,7 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
             aria-selected={filter === 'healthcare'}
             aria-controls="workGrid"
             className={`filter-btn ${filter === 'healthcare' ? 'is-active' : ''}`}
-            onClick={() => setFilter('healthcare')}
+            onClick={() => handleFilterChange('healthcare')}
           >
             Healthcare
           </button>
@@ -106,6 +157,6 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
           ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }

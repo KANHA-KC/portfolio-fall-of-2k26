@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 
 export default function CustomCursor() {
   const [cursorState, setCursorState] = useState<{
@@ -15,71 +16,66 @@ export default function CustomCursor() {
 
   const [isPressed, setIsPressed] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only enable on non-touch desktop devices
     if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) {
       return;
     }
 
-    let mouseX = -100;
-    let mouseY = -100;
-    let ringX = -100;
-    let ringY = -100;
-    let animationFrameId: number;
+    // Set up optimized GSAP quickTo setters for instant and critically-damped coordinates
+    const setDotX = gsap.quickTo(dotRef.current, 'x', { duration: 0.04, ease: 'power1.out' });
+    const setDotY = gsap.quickTo(dotRef.current, 'y', { duration: 0.04, ease: 'power1.out' });
+
+    const setRingX = gsap.quickTo(ringRef.current, 'x', { duration: 0.18, ease: 'power2.out' });
+    const setRingY = gsap.quickTo(ringRef.current, 'y', { duration: 0.18, ease: 'power2.out' });
+
+    const setLabelX = gsap.quickTo(labelRef.current, 'x', { duration: 0.18, ease: 'power2.out' });
+    const setLabelY = gsap.quickTo(labelRef.current, 'y', { duration: 0.18, ease: 'power2.out' });
 
     const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-      }
+      setDotX(e.clientX);
+      setDotY(e.clientY);
+      setRingX(e.clientX);
+      setRingY(e.clientY);
+      setLabelX(e.clientX);
+      setLabelY(e.clientY);
     };
 
-    // Apple Design: Critically damped motion (damping 1.0, snappy response)
-    const renderRing = () => {
-      // 0.20 lerp response provides critically-damped settling without sluggishness
-      ringX += (mouseX - ringX) * 0.2;
-      ringY += (mouseY - ringY) * 0.2;
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX}px, ${ringY}px)`;
-      }
-      if (labelRef.current) {
-        labelRef.current.style.transform = `translate(${ringX}px, ${ringY}px)`;
-      }
-
-      animationFrameId = requestAnimationFrame(renderRing);
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-    animationFrameId = requestAnimationFrame(renderRing);
-
-    // Apple Design §1: Instant response on pointer-down
+    // Pointer press reactions
     const handleMouseDown = () => setIsPressed(true);
     const handleMouseUp = () => setIsPressed(false);
 
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
 
-    // Dynamic delegation for data-cursor hover states
+    // Dynamic delegation for hover states on buttons, links, and interactive elements
     const handleMouseOver = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest('[data-cursor]');
+      const target = (e.target as HTMLElement).closest<HTMLElement>(
+        '[data-cursor], a, button, .btn, .nav__theme-btn'
+      );
       if (target) {
-        const type = target.getAttribute('data-cursor') || 'view';
+        const type = target.getAttribute('data-cursor') || 'hover';
+        // Only show explicit labels if explicitly designated with data-cursor-label,
+        // so button/link text stays visible through the inverted blob
+        const explicitLabel = target.getAttribute('data-cursor-label') || '';
         setCursorState({
           hovering: true,
           type,
-          label: type.toUpperCase(),
+          label: explicitLabel,
         });
       }
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest('[data-cursor]');
+      const target = (e.target as HTMLElement).closest<HTMLElement>(
+        '[data-cursor], a, button, .btn, .nav__theme-btn'
+      );
       if (target) {
         setCursorState({
           hovering: false,
@@ -89,34 +85,45 @@ export default function CustomCursor() {
       }
     };
 
-    // Magnetic buttons delegation with Apple spring damping
+    // Magnetic buttons with GSAP elastic release physics
     const handleMagneticMove = (e: MouseEvent) => {
       const magnet = (e.target as HTMLElement).closest<HTMLElement>('.btn--magnetic, .btn--primary');
       if (magnet) {
         const rect = magnet.getBoundingClientRect();
         const x = e.clientX - (rect.left + rect.width / 2);
         const y = e.clientY - (rect.top + rect.height / 2);
-        magnet.style.transform = `translate(${x * 0.16}px, ${y * 0.16}px)`;
+        gsap.to(magnet, {
+          x: x * 0.22,
+          y: y * 0.22,
+          duration: 0.35,
+          ease: 'power3.out',
+          overwrite: 'auto',
+        });
       }
     };
 
     const handleMagneticLeave = (e: MouseEvent) => {
       const magnet = (e.target as HTMLElement).closest<HTMLElement>('.btn--magnetic, .btn--primary');
       if (magnet) {
-        magnet.style.transform = 'translate(0px, 0px)';
+        gsap.to(magnet, {
+          x: 0,
+          y: 0,
+          duration: 0.7,
+          ease: 'elastic.out(1, 0.4)',
+          overwrite: 'auto',
+        });
       }
     };
 
     document.addEventListener('mouseover', handleMouseOver);
     document.addEventListener('mouseout', handleMouseOut);
-    document.addEventListener('mousemove', handleMagneticMove);
+    document.addEventListener('mousemove', handleMagneticMove, { passive: true });
     document.addEventListener('mouseleave', handleMagneticLeave);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
-      cancelAnimationFrame(animationFrameId);
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseout', handleMouseOut);
       document.removeEventListener('mousemove', handleMagneticMove);
@@ -127,6 +134,7 @@ export default function CustomCursor() {
   const className = [
     'cursor',
     cursorState.hovering ? 'is-hovering' : '',
+    cursorState.label ? 'has-label' : '',
     cursorState.type ? `cursor--${cursorState.type}` : '',
     isPressed ? 'is-pressed' : '',
   ]
@@ -135,11 +143,12 @@ export default function CustomCursor() {
 
   return (
     <div
+      ref={containerRef}
       className={className}
       aria-hidden="true"
       style={{
         transform: isPressed ? 'scale(0.82)' : 'scale(1)',
-        transition: 'transform 80ms cubic-bezier(0, 0, 0.2, 1)',
+        transition: 'transform 120ms cubic-bezier(0, 0, 0.2, 1)',
       }}
     >
       <div ref={dotRef} className="cursor__dot" />

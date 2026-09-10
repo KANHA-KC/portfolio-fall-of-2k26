@@ -198,6 +198,23 @@ export default function HeroScene() {
         };
         window.addEventListener('resize', onResize);
 
+        let scrollProgress = 0;
+        let scrollTriggerInstance: any = null;
+
+        const { gsap } = await import('gsap');
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+        gsap.registerPlugin(ScrollTrigger);
+
+        scrollTriggerInstance = ScrollTrigger.create({
+          trigger: document.body,
+          start: 'top top',
+          end: '850px top',
+          scrub: 1.2,
+          onUpdate: (self) => {
+            scrollProgress = self.progress;
+          },
+        });
+
         const clock = new THREE.Clock();
         const animate = () => {
           animationFrameId = requestAnimationFrame(animate);
@@ -205,13 +222,19 @@ export default function HeroScene() {
           const delta = clock.getDelta();
           sculpture.rotation.x += delta * 0.22;
           sculpture.rotation.y += delta * 0.28;
+          sculpture.rotation.z = scrollProgress * 0.65;
 
           currentX += (targetX - currentX) * 0.05;
           currentY += (targetY - currentY) * 0.05;
 
           const baseX = getBaseX();
           sculpture.position.x = baseX + currentX;
-          sculpture.position.y = 0.05 - currentY;
+          sculpture.position.y = 0.05 - currentY - scrollProgress * 1.6;
+          sculpture.position.z = -scrollProgress * 2.2;
+
+          if (canvas) {
+            canvas.style.opacity = `${Math.max(0, 1 - scrollProgress * 1.1)}`;
+          }
 
           // Smoothly interpolate material color, roughness, metalness, and lighting
           material.color.lerp(targetSculptureColor, 0.055);
@@ -235,6 +258,7 @@ export default function HeroScene() {
         animate();
 
         cleanupThree = () => {
+          if (scrollTriggerInstance) scrollTriggerInstance.kill();
           observer.disconnect();
           window.removeEventListener('theme-change', handleThemeEvent);
           window.removeEventListener('mousemove', onMouseMove);

@@ -260,7 +260,7 @@ img {
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
-  transition: transform 0.1s ease-out, background-color var(--transition-fast);
+  transition: transform 0.1s ease-out, background-color var(--transition-fast), opacity 0.2s ease;
 }
 
 .cursor__ring {
@@ -272,7 +272,7 @@ img {
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
-  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), border-color 0.25s ease, background 0.25s ease;
+  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out), border-color 0.25s ease, background-color 0.25s ease;
 }
 
 .cursor__label {
@@ -291,27 +291,36 @@ img {
   white-space: nowrap;
 }
 
-/* Cursor hover states */
+/* Cursor hover states: negative color inverted lens */
+.cursor.is-hovering {
+  mix-blend-mode: difference;
+}
+
 .cursor.is-hovering .cursor__ring {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   border-color: transparent;
-  background-color: var(--clay);
+  background-color: #ffffff;
 }
 
 .cursor.is-hovering .cursor__dot {
   opacity: 0;
 }
 
-.cursor.is-hovering .cursor__label {
+/* Only display badge label if element explicitly has a data-cursor-label */
+.cursor.is-hovering.has-label {
+  mix-blend-mode: normal;
+}
+
+.cursor.is-hovering.has-label .cursor__label {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-.cursor.cursor--view .cursor__ring { background-color: var(--clay); }
-.cursor.cursor--read .cursor__ring { background-color: var(--moss); }
-.cursor.cursor--play .cursor__ring { background-color: var(--terracotta); }
-.cursor.cursor--open .cursor__ring { background-color: var(--ink); }
+.cursor.is-hovering.has-label.cursor--view .cursor__ring { background-color: var(--clay); }
+.cursor.is-hovering.has-label.cursor--read .cursor__ring { background-color: var(--moss); }
+.cursor.is-hovering.has-label.cursor--play .cursor__ring { background-color: var(--terracotta); }
+.cursor.is-hovering.has-label.cursor--open .cursor__ring { background-color: var(--ink); }
 
 /* ==========================================================================
    CANVAS 3D HERO SCENE
@@ -682,18 +691,7 @@ main {
 
 .hero__title .line span {
   display: inline-block;
-  transform: translateY(115%);
-  animation: revealTitle 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.hero__title .line:nth-child(1) span { animation-delay: 0.1s; }
-.hero__title .line:nth-child(2) span { animation-delay: 0.22s; }
-.hero__title .line:nth-child(3) span { animation-delay: 0.35s; }
-
-@keyframes revealTitle {
-  to {
-    transform: translateY(0%);
-  }
+  will-change: transform;
 }
 
 .hero__title em {
@@ -1063,23 +1061,17 @@ main {
 .principle-item__icon {
   font-size: 1.2rem;
   color: var(--ink-muted);
-  transition: transform var(--transition-fast);
-}
-
-.principle-item.is-open .principle-item__icon {
-  transform: rotate(45deg);
+  display: inline-block;
+  transform-origin: center center;
 }
 
 .principle-item__content {
-  max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s var(--ease-out), padding 0.35s var(--ease-out);
   padding: 0 12px 0 68px;
 }
 
-.principle-item.is-open .principle-item__content {
-  max-height: 180px;
-  padding: 0 12px 28px 68px;
+.principle-item__content-inner {
+  padding-bottom: 28px;
 }
 
 .principle-item__content p {
@@ -1496,11 +1488,9 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  width: 0%;
   height: 3px;
   background-color: var(--clay);
   z-index: 99999;
-  transition: width 0.1s linear;
 }
 
 .article-reader {
@@ -2061,7 +2051,7 @@ main {
   position: fixed;
   bottom: 30px;
   left: 50%;
-  transform: translateX(-50%) translateY(100px);
+  transform: translateX(-50%);
   background: var(--ink);
   color: #fff;
   padding: 12px 24px;
@@ -2070,14 +2060,7 @@ main {
   font-weight: 500;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   z-index: 10000;
-  opacity: 0;
-  transition: transform 0.3s var(--ease-out), opacity 0.3s ease;
   pointer-events: none;
-}
-
-.toast.is-visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
 }
 
 /* ==========================================================================
