@@ -88,4 +88,4 @@ export interface AboutData {
   orbit: OrbitNode[];
 }
 
-export type ThemeMode = 'paper' | 'clay' | 'dark';
+export type ThemeMode = 'light' | 'dark' | 'paper' | 'clay';

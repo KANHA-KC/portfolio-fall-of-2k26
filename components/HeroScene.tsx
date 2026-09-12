@@ -16,43 +16,7 @@ interface ThemePreset {
 }
 
 const THEME_PRESETS: Record<string, ThemePreset> = {
-  paper: {
-    sculptureColor: 0xc86d51,       // Terracotta Clay on Linen & Olive
-    roughness: 0.65,
-    metalness: 0.10,
-    ambientColor: 0xf4efe6,
-    ambientIntensity: 1.3,
-    keyColor: 0xfff8ee,
-    keyIntensity: 2.0,
-    rimColor: 0x556b2f,             // Olive green rim reflection
-    rimIntensity: 1.6,
-    fallbackStroke: 'rgba(200, 109, 81, 0.28)',
-  },
-  clay: {
-    sculptureColor: 0xb95b3d,       // Deep Rich Terracotta
-    roughness: 0.58,
-    metalness: 0.14,
-    ambientColor: 0xfceee6,
-    ambientIntensity: 1.4,
-    keyColor: 0xfff5eb,
-    keyIntensity: 2.1,
-    rimColor: 0x84351d,             // Burnt rust rim
-    rimIntensity: 1.8,
-    fallbackStroke: 'rgba(185, 91, 61, 0.32)',
-  },
-  dark: {
-    sculptureColor: 0x6e8e50,       // Sculpted Sage Olive Jade in Deep Forest
-    roughness: 0.44,
-    metalness: 0.22,
-    ambientColor: 0x22301c,         // Deep forest ambient glow
-    ambientIntensity: 1.7,
-    keyColor: 0xdbedd0,             // Pale luminous sage moonlight key light
-    keyIntensity: 2.3,
-    rimColor: 0xe08569,             // Luminous warm terracotta rim light
-    rimIntensity: 2.2,
-    fallbackStroke: 'rgba(143, 168, 102, 0.35)',
-  },
-  v2_light: {
+  light: {
     sculptureColor: 0x111111,       // Precision Obsidian / Chrome
     roughness: 0.22,
     metalness: 0.85,
@@ -64,7 +28,7 @@ const THEME_PRESETS: Record<string, ThemePreset> = {
     rimIntensity: 2.8,
     fallbackStroke: 'rgba(255, 0, 0, 0.4)',
   },
-  v2_dark: {
+  dark: {
     sculptureColor: 0x141414,       // Deep Noir Glass
     roughness: 0.20,
     metalness: 0.90,
@@ -73,6 +37,54 @@ const THEME_PRESETS: Record<string, ThemePreset> = {
     keyColor: 0xffffff,
     keyIntensity: 1.9,
     rimColor: 0xd2f75a,             // Electric Volt Neon rim (#D2F75A)
+    rimIntensity: 3.0,
+    fallbackStroke: 'rgba(210, 247, 90, 0.45)',
+  },
+  paper: {
+    sculptureColor: 0x111111,
+    roughness: 0.22,
+    metalness: 0.85,
+    ambientColor: 0xffffff,
+    ambientIntensity: 1.5,
+    keyColor: 0xffffff,
+    keyIntensity: 2.4,
+    rimColor: 0xff0000,
+    rimIntensity: 2.8,
+    fallbackStroke: 'rgba(255, 0, 0, 0.4)',
+  },
+  clay: {
+    sculptureColor: 0x111111,
+    roughness: 0.22,
+    metalness: 0.85,
+    ambientColor: 0xffffff,
+    ambientIntensity: 1.5,
+    keyColor: 0xffffff,
+    keyIntensity: 2.4,
+    rimColor: 0xff0000,
+    rimIntensity: 2.8,
+    fallbackStroke: 'rgba(255, 0, 0, 0.4)',
+  },
+  v2_light: {
+    sculptureColor: 0x111111,
+    roughness: 0.22,
+    metalness: 0.85,
+    ambientColor: 0xffffff,
+    ambientIntensity: 1.5,
+    keyColor: 0xffffff,
+    keyIntensity: 2.4,
+    rimColor: 0xff0000,
+    rimIntensity: 2.8,
+    fallbackStroke: 'rgba(255, 0, 0, 0.4)',
+  },
+  v2_dark: {
+    sculptureColor: 0x141414,
+    roughness: 0.20,
+    metalness: 0.90,
+    ambientColor: 0x1a1a1a,
+    ambientIntensity: 1.2,
+    keyColor: 0xffffff,
+    keyIntensity: 1.9,
+    rimColor: 0xd2f75a,
     rimIntensity: 3.0,
     fallbackStroke: 'rgba(210, 247, 90, 0.45)',
   },
@@ -103,8 +115,8 @@ export default function HeroScene() {
         const initialTheme =
           (typeof document !== 'undefined' &&
             document.documentElement.getAttribute('data-theme')) ||
-          'paper';
-        let targetPreset = THEME_PRESETS[initialTheme] || THEME_PRESETS.paper;
+          'dark';
+        let targetPreset = initialTheme === 'dark' ? THEME_PRESETS.dark : THEME_PRESETS.light;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
@@ -170,16 +182,9 @@ export default function HeroScene() {
           const themeName =
             (typeof document !== 'undefined' &&
               document.documentElement.getAttribute('data-theme')) ||
-            'paper';
-          const versionName =
-            (typeof document !== 'undefined' &&
-              document.documentElement.getAttribute('data-version')) ||
-            'v1';
+            'dark';
 
-          let preset = THEME_PRESETS[themeName] || THEME_PRESETS.paper;
-          if (versionName === 'v2') {
-            preset = themeName === 'dark' ? THEME_PRESETS.v2_dark : THEME_PRESETS.v2_light;
-          }
+          const preset = themeName === 'dark' ? THEME_PRESETS.dark : THEME_PRESETS.light;
 
           targetPreset = preset;
           targetSculptureColor.setHex(preset.sculptureColor);
@@ -324,15 +329,8 @@ export default function HeroScene() {
         const t =
           (typeof document !== 'undefined' &&
             document.documentElement.getAttribute('data-theme')) ||
-          'paper';
-        const v =
-          (typeof document !== 'undefined' &&
-            document.documentElement.getAttribute('data-version')) ||
-          'v1';
-        if (v === 'v2') {
-          return t === 'dark' ? 'v2_dark' : 'v2_light';
-        }
-        return t;
+          'dark';
+        return t === 'dark' ? 'dark' : 'light';
       };
 
       let currentTheme = getCurrentFallbackPreset();

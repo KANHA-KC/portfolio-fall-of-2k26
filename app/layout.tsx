@@ -84,8 +84,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="paper"
-      data-version="v1"
+      data-theme="dark"
+      data-version="v2"
       className={`${fraunces.variable} ${inter.variable} ${instagramSans.variable} ${playfair.variable} ${firaCode.variable}`}
     >
       <body>

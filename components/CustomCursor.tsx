@@ -95,7 +95,7 @@ export default function CustomCursor() {
     // Dynamic delegation for hover states on buttons, links, and interactive elements
     const handleMouseOver = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-cursor], a, button, .btn, .nav__theme-btn, .nav__version-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
+        '[data-cursor], a, button, .btn, .nav__theme-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
         const type = target.getAttribute('data-cursor') || 'hover';
@@ -112,7 +112,7 @@ export default function CustomCursor() {
 
     const handleMouseOut = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-cursor], a, button, .btn, .nav__theme-btn, .nav__version-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
+        '[data-cursor], a, button, .btn, .nav__theme-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
         setCursorState({

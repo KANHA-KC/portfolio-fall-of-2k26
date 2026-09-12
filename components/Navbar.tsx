@@ -9,19 +9,19 @@ import BrandSignature from './BrandSignature';
 import { ThemeMode } from '@/lib/types';
 import { liquidGlass } from '@/lib/liquid-glass';
 
-const THEMES: ThemeMode[] = ['paper', 'clay', 'dark'];
-const THEME_LABELS: Record<ThemeMode, string> = {
-  paper: '◐ Olive & Linen',
-  clay: '◐ Terracotta',
-  dark: '◐ Deep Forest',
+const THEMES: ThemeMode[] = ['dark', 'light'];
+const THEME_LABELS: Record<string, string> = {
+  dark: '◐ Dark',
+  light: '◐ Light',
+  paper: '◐ Light',
+  clay: '◐ Light',
 };
 
 export default function Navbar() {
   const pathname = usePathname();
   const { showToast } = useToast();
 
-  const [theme, setTheme] = useState<ThemeMode>('paper');
-  const [version, setVersion] = useState<'v1' | 'v2'>('v1');
+  const [theme, setTheme] = useState<ThemeMode>('dark');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [easterOpen, setEasterOpen] = useState(false);
 
@@ -47,27 +47,15 @@ export default function Navbar() {
     };
   }, []);
 
-  // Initialize theme and version on mount
+  // Initialize theme on mount - permanently Version 2
   useEffect(() => {
-    const saved = localStorage.getItem('studio_theme') as ThemeMode | null;
-    if (saved && THEMES.includes(saved)) {
-      setTheme(saved);
-      document.documentElement.setAttribute('data-theme', saved);
-      window.dispatchEvent(new CustomEvent('theme-change', { detail: saved }));
-    } else {
-      document.documentElement.setAttribute('data-theme', 'paper');
-      window.dispatchEvent(new CustomEvent('theme-change', { detail: 'paper' }));
-    }
+    document.documentElement.setAttribute('data-version', 'v2');
 
-    const savedVersion = localStorage.getItem('studio_version') as 'v1' | 'v2' | null;
-    if (savedVersion === 'v2') {
-      setVersion('v2');
-      document.documentElement.setAttribute('data-version', 'v2');
-      window.dispatchEvent(new CustomEvent('version-change', { detail: 'v2' }));
-    } else {
-      document.documentElement.setAttribute('data-version', 'v1');
-      window.dispatchEvent(new CustomEvent('version-change', { detail: 'v1' }));
-    }
+    const saved = localStorage.getItem('studio_theme');
+    const initialTheme: ThemeMode = saved === 'light' || saved === 'paper' || saved === 'clay' ? 'light' : 'dark';
+    setTheme(initialTheme);
+    document.documentElement.setAttribute('data-theme', initialTheme);
+    window.dispatchEvent(new CustomEvent('theme-change', { detail: initialTheme }));
   }, []);
 
   // Synchronize favicon dynamically with theme changes
@@ -86,29 +74,16 @@ export default function Navbar() {
     }
   }, [theme]);
 
-  const toggleVersion = () => {
-    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
-      try { navigator.vibrate(10); } catch {}
-    }
-    const nextVersion = version === 'v1' ? 'v2' : 'v1';
-    setVersion(nextVersion);
-    document.documentElement.setAttribute('data-version', nextVersion);
-    localStorage.setItem('studio_version', nextVersion);
-    window.dispatchEvent(new CustomEvent('version-change', { detail: nextVersion }));
-    showToast(nextVersion === 'v2' ? 'Switched to Version 2' : 'Switched to Version 1');
-  };
-
   const cycleTheme = () => {
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
       try { navigator.vibrate(8); } catch {}
     }
-    const nextIdx = (THEMES.indexOf(theme) + 1) % THEMES.length;
-    const nextTheme = THEMES[nextIdx];
+    const nextTheme: ThemeMode = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('studio_theme', nextTheme);
     window.dispatchEvent(new CustomEvent('theme-change', { detail: nextTheme }));
-    showToast(`Theme switched to ${nextTheme.toUpperCase()}`);
+    showToast(nextTheme === 'dark' ? 'Dark Mode' : 'Light Mode');
   };
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -179,20 +154,9 @@ export default function Navbar() {
           <div className="nav__actions">
             <button
               type="button"
-              className={`nav__version-btn ${version === 'v2' ? 'is-active' : ''}`}
-              onClick={toggleVersion}
-              title={version === 'v2' ? 'Switch back to Version 1' : 'Switch to Version 2'}
-              aria-label={`Current design: Version ${version === 'v2' ? '2' : '1'}. Click to switch.`}
-            >
-              <span className={`nav__version-dot ${version === 'v2' ? 'is-v2' : ''}`} aria-hidden="true" />
-              <span className="nav__version-text">{version === 'v2' ? 'Version 1' : 'Version 2'}</span>
-            </button>
-
-            <button
-              type="button"
               className="nav__theme-btn"
               onClick={cycleTheme}
-              title="Cycle Paper / Clay / Nocturne themes"
+              title="Toggle Light / Dark mode"
               aria-label={`Current theme: ${theme}. Click to switch.`}
             >
               {THEME_LABELS[theme]}
