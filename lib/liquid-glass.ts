@@ -54,6 +54,11 @@ function checkChromiumSupport(): boolean {
   }
 }
 
+function checkReducedTransparency(): boolean {
+  if (typeof window === "undefined") return false;
+  return !!(window.matchMedia && window.matchMedia("(prefers-reduced-transparency: reduce)").matches);
+}
+
 function ensureDefs(): SVGDefsElement {
   if (svgDefs && svgDefs.ownerDocument.body.contains(svgDefs)) {
     return svgDefs;
@@ -229,6 +234,20 @@ export function liquidGlass(el: HTMLElement, opts?: LiquidGlassOptions): LiquidG
     },
     opts
   );
+
+  if (checkReducedTransparency()) {
+    el.classList.add("lg-reduced-transparency");
+    const disabledInstance: LiquidGlassInstance = {
+      supported: false,
+      refresh: () => {},
+      destroy: () => {
+        delete (el as any).__liquidGlass;
+        el.classList.remove("lg-reduced-transparency");
+      },
+    };
+    (el as any).__liquidGlass = disabledInstance;
+    return disabledInstance;
+  }
 
   const supported = checkChromiumSupport();
 

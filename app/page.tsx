@@ -8,7 +8,6 @@ import { useGSAP } from '@gsap/react';
 import HeroScene from '@/components/HeroScene';
 import PrinciplesAccordion from '@/components/PrinciplesAccordion';
 import { getProjects, getPrinciples, getArticles } from '@/lib/data';
-import { applyLiquidGlass } from '@/lib/liquid-glass';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -17,33 +16,6 @@ export default function HomePage() {
   const projects = getProjects().slice(0, 2);
   const principles = getPrinciples();
   const articles = getArticles().slice(0, 3);
-
-  // Apply Apple-style liquid glass refraction across components
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const cleanups = [
-      applyLiquidGlass(
-        containerRef.current.querySelectorAll('.stack__card') as NodeListOf<HTMLElement>,
-        { scale: -65, chroma: 3.5, border: 0.08, mapBlur: 10, blur: 3, saturate: 1.4 }
-      ),
-      applyLiquidGlass(
-        containerRef.current.querySelectorAll('.preview__grid .project-card') as NodeListOf<HTMLElement>,
-        { scale: -70, chroma: 4, border: 0.06, mapBlur: 10, blur: 3, saturate: 1.4 }
-      ),
-      applyLiquidGlass(
-        containerRef.current.querySelectorAll('.hero__cta .btn') as NodeListOf<HTMLElement>,
-        { scale: -60, chroma: 3, border: 0.12, mapBlur: 8, blur: 3, saturate: 1.4 }
-      ),
-      applyLiquidGlass(
-        containerRef.current.querySelectorAll('.preview__more') as NodeListOf<HTMLElement>,
-        { scale: -60, chroma: 3, border: 0.1, mapBlur: 8, blur: 3, saturate: 1.4 }
-      ),
-    ];
-
-    return () => {
-      cleanups.forEach((c) => c());
-    };
-  }, []);
 
   useGSAP(
     () => {

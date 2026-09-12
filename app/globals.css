@@ -2243,7 +2243,7 @@ main {
   line-height: 1.6;
 }
 
-/* Filter Controls */
+/* Filter Controls: Apple Liquid Glass Pills */
 .filter-bar {
   display: flex;
   align-items: center;
@@ -2257,26 +2257,127 @@ main {
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: 10px 22px;
-  border-radius: 999px;
+  padding: 10px 24px;
+  border-radius: 9999px;
   font-size: 0.88rem;
   font-weight: 500;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  letter-spacing: -0.01em;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(246, 240, 230, 0.52) 100%);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   color: var(--ink-light);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  box-shadow:
+    0 4px 14px rgba(43, 38, 37, 0.05),
+    0 1px 3px rgba(43, 38, 37, 0.03),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    color var(--transition-fast);
+  overflow: hidden;
 }
 
 .filter-btn:hover {
-  background: var(--bg-card-hover);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(250, 245, 238, 0.68) 100%);
+  border-color: rgba(255, 255, 255, 0.95);
   color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 20px rgba(43, 38, 37, 0.08),
+    0 2px 6px rgba(43, 38, 37, 0.04),
+    inset 0 1.5px 2px rgba(255, 255, 255, 1),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
 .filter-btn.is-active {
-  background: var(--olive);
+  background: linear-gradient(180deg, rgba(35, 30, 28, 0.92) 0%, rgba(20, 18, 17, 0.86) 100%);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff;
-  border-color: var(--olive);
+  font-weight: 600;
+  box-shadow:
+    0 8px 24px rgba(20, 18, 17, 0.24),
+    0 2px 6px rgba(20, 18, 17, 0.12),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1.5px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn.is-active:hover {
+  background: linear-gradient(180deg, rgba(45, 38, 36, 0.95) 0%, rgba(26, 23, 22, 0.90) 100%);
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 10px 28px rgba(20, 18, 17, 0.28),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1.5px rgba(0, 0, 0, 0.5);
+}
+
+/* Theme variations for Liquid Glass filter pills */
+[data-theme="dark"] .filter-btn {
+  background: linear-gradient(180deg, rgba(40, 50, 36, 0.55) 0%, rgba(25, 32, 22, 0.45) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #dcd6cb;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .filter-btn:hover {
+  background: linear-gradient(180deg, rgba(50, 62, 45, 0.65) 0%, rgba(32, 40, 28, 0.55) 100%);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] .filter-btn.is-active {
+  background: linear-gradient(180deg, rgba(210, 247, 90, 0.92) 0%, rgba(182, 220, 72, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #12170d;
+  box-shadow:
+    0 8px 24px rgba(210, 247, 90, 0.32),
+    0 0 14px rgba(210, 247, 90, 0.2),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="clay"] .filter-btn {
+  background: linear-gradient(180deg, rgba(255, 250, 246, 0.74) 0%, rgba(248, 238, 230, 0.55) 100%);
+  border: 1px solid rgba(186, 91, 61, 0.18);
+  box-shadow:
+    0 4px 14px rgba(70, 35, 20, 0.05),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="clay"] .filter-btn.is-active {
+  background: linear-gradient(180deg, rgba(186, 91, 61, 0.92) 0%, rgba(158, 74, 48, 0.86) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  box-shadow:
+    0 8px 24px rgba(186, 91, 61, 0.28),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+}
+
+[data-version="v2"] .filter-btn.is-active {
+  background: linear-gradient(180deg, rgba(255, 0, 0, 0.92) 0%, rgba(215, 0, 0, 0.86) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  box-shadow:
+    0 8px 24px rgba(255, 0, 0, 0.3),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45);
 }
 
 /* ==========================================================================
@@ -3556,8 +3657,34 @@ main {
     background: #181715 !important;
   }
 
+  .project-card,
+  .bench-card,
+  .stack__card,
+  .contact-form,
+  .foot {
+    background: var(--bg-card) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  [data-theme="dark"] .project-card,
+  [data-theme="dark"] .bench-card,
+  [data-theme="dark"] .stack__card,
+  [data-theme="dark"] .contact-form,
+  [data-theme="dark"] .foot {
+    background: #1e261a !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .cursor__ring {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
   .easter-modal {
-    background: rgba(0, 0, 0, 0.85) !important;
+    background: rgba(0, 0, 0, 0.95) !important;
     backdrop-filter: none !important;
   }
 

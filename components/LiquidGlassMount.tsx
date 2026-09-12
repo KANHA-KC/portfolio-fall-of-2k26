@@ -11,37 +11,28 @@ export default function LiquidGlassMount() {
     const cleanups: (() => void)[] = [];
 
     const mount = () => {
-      // Buttons & Pills (Hero CTA, pagination Next/Back, preview links, topic pills, orbit nodes)
+      // Apple Liquid Glass Guidelines (Do #2 & Don't #1):
+      // Functional Chrome Layer only (Floating Navigation Bar)
       cleanups.push(
         applyLiquidGlass(
-          document.querySelectorAll(
-            '.btn--primary, .btn--ghost, .preview__more, .topic-pill, .orbit-badge, .filter-btn'
-          ) as NodeListOf<HTMLElement>,
-          { scale: -60, chroma: 3, border: 0.12, mapBlur: 8, blur: 3, saturate: 1.4 }
+          document.querySelectorAll('.nav') as NodeListOf<HTMLElement>,
+          { scale: -85, chroma: 4.5, border: 0.08, mapBlur: 10, blur: 4, saturate: 1.5 }
         )
       );
 
-      // Circular Hub (Studio orbit center)
+      // Transient Floating Chrome (Modals & Toasts)
       cleanups.push(
         applyLiquidGlass(
-          document.querySelectorAll('.orbit-center') as NodeListOf<HTMLElement>,
-          { scale: -70, chroma: 4, border: 0.1, mapBlur: 10, blur: 3, saturate: 1.4 }
+          document.querySelectorAll('.easter-modal-card, .toast') as NodeListOf<HTMLElement>,
+          { scale: -75, chroma: 4, border: 0.08, mapBlur: 10, blur: 4, saturate: 1.5 }
         )
       );
 
-      // Cards (Work cards, Benchmark experiment cards, Process stack cards)
+      // Interactive Filter Controls (Segmented topic pills in Writing & Work)
       cleanups.push(
         applyLiquidGlass(
-          document.querySelectorAll('.project-card, .bench-card, .stack__card') as NodeListOf<HTMLElement>,
-          { scale: -70, chroma: 4, border: 0.07, mapBlur: 10, blur: 3, saturate: 1.4 }
-        )
-      );
-
-      // Large Panels (Footer, Contact Form card)
-      cleanups.push(
-        applyLiquidGlass(
-          document.querySelectorAll('.foot, .contact-form') as NodeListOf<HTMLElement>,
-          { scale: -75, chroma: 4, border: 0.06, mapBlur: 10, blur: 4, saturate: 1.5 }
+          document.querySelectorAll('.filter-bar .filter-btn') as NodeListOf<HTMLElement>,
+          { scale: -50, chroma: 2.5, border: 0.12, mapBlur: 8, blur: 2.5, saturate: 1.4 }
         )
       );
     };
