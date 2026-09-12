@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Experiments — Studio',
   description:
     'Tactile micro-interactions, generative art, and creative code prototypes.',
+  alternates: {
+    canonical: '/experiments',
+  },
 };
 
 export default function ExperimentsPage() {

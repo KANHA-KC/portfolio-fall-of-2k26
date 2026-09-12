@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Work — Studio',
   description:
     'Case studies across AI orchestration, data systems, and healthcare design.',
+  alternates: {
+    canonical: '/work',
+  },
 };
 
 export default function WorkPage() {

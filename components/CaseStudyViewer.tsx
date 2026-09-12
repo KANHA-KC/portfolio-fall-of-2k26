@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import CopyLinkButton from '@/components/CopyLinkButton';
 import EscapeNav from '@/components/EscapeNav';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 import { Project } from '@/lib/types';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -183,9 +184,9 @@ export default function CaseStudyViewer({ project, nextProject }: CaseStudyViewe
         </div>
 
         <nav className="case-study__nav">
-          <Link href="/work" className="btn btn--ghost" data-cursor="view">
-            ← All Work
-          </Link>
+          <LiquidSecondaryButton href="/work" data-cursor="view">
+            All Work
+          </LiquidSecondaryButton>
           <div className="next-nav-item">
             <Link
               href={`/work/${nextProject.slug}`}

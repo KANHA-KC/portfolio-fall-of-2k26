@@ -6,6 +6,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import OrbitVisualization from '@/components/OrbitVisualization';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 import { AboutData } from '@/lib/types';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -128,14 +129,13 @@ export default function AboutContent({ aboutData }: AboutContentProps) {
             >
               Let&apos;s talk about a project
             </Link>
-            <Link
+            <LiquidSecondaryButton
               href="/work"
-              className="btn btn--ghost"
               data-cursor="view"
               style={{ marginLeft: '12px' }}
             >
               Browse case studies
-            </Link>
+            </LiquidSecondaryButton>
           </div>
         </div>
 

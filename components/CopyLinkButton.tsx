@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useToast } from './Toast';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 
 interface CopyLinkButtonProps {
   label?: string;
@@ -10,7 +11,7 @@ interface CopyLinkButtonProps {
 }
 
 export default function CopyLinkButton({
-  label = '🔗 Copy Link',
+  label = 'Copy Link',
   toastMessage = 'Link copied to clipboard!',
   style,
 }: CopyLinkButtonProps) {
@@ -26,13 +27,12 @@ export default function CopyLinkButton({
   };
 
   return (
-    <button
+    <LiquidSecondaryButton
       type="button"
-      className="btn btn--ghost"
       onClick={handleCopy}
       style={{ padding: '6px 14px', fontSize: '0.78rem', ...style }}
     >
       {label}
-    </button>
+    </LiquidSecondaryButton>
   );
 }

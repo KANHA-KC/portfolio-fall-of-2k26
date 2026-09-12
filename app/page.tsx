@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import HeroScene from '@/components/HeroScene';
 import PrinciplesAccordion from '@/components/PrinciplesAccordion';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 import { getProjects, getPrinciples, getArticles } from '@/lib/data';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -203,9 +204,9 @@ export default function HomePage() {
           >
             Explore my work
           </Link>
-          <Link className="btn btn--ghost" href="/about" data-cursor="view">
+          <LiquidSecondaryButton href="/about" data-cursor="view">
             About me
-          </Link>
+          </LiquidSecondaryButton>
         </div>
 
         <div className="hero__scroll" aria-hidden="true">
@@ -311,9 +312,11 @@ export default function HomePage() {
           ))}
         </div>
 
-        <Link className="preview__more" href="/work" data-cursor="view">
-          View all work →
-        </Link>
+        <div style={{ marginTop: '32px' }}>
+          <LiquidSecondaryButton href="/work" data-cursor="view">
+            View all work
+          </LiquidSecondaryButton>
+        </div>
       </section>
 
       {/* How I Think / Principles */}
@@ -351,9 +354,11 @@ export default function HomePage() {
           ))}
         </ul>
 
-        <Link className="preview__more" href="/writing" data-cursor="read">
-          All writing →
-        </Link>
+        <div style={{ marginTop: '32px' }}>
+          <LiquidSecondaryButton href="/writing" data-cursor="read">
+            All writing
+          </LiquidSecondaryButton>
+        </div>
       </section>
     </div>
   );

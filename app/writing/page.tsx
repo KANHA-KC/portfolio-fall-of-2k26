@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Writing — Studio',
   description:
     'Observations on cognitive momentum, probabilistic software, typographic restraint, and why the best interfaces feel inevitable.',
+  alternates: {
+    canonical: '/writing',
+  },
 };
 
 export default function WritingPage() {

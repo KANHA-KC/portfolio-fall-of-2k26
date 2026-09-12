@@ -27,6 +27,9 @@ export async function generateMetadata({
   return {
     title: `${project.title} — Case Study — Studio`,
     description: project.thesis,
+    alternates: {
+      canonical: `/work/${project.slug}`,
+    },
   };
 }
 

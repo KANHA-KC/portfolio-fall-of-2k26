@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import ReadingProgress from '@/components/ReadingProgress';
 import CopyLinkButton from '@/components/CopyLinkButton';
 import EscapeNav from '@/components/EscapeNav';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 import { getArticles, getArticleBySlug } from '@/lib/data';
 
 interface PageProps {
@@ -29,6 +30,9 @@ export async function generateMetadata({
   return {
     title: `${article.title} — Studio`,
     description: article.excerpt,
+    alternates: {
+      canonical: `/writing/${article.slug}`,
+    },
   };
 }
 
@@ -173,9 +177,9 @@ export default function ArticleDetailPage({ params }: PageProps) {
         </div>
 
         <nav className="case-study__nav" style={{ marginTop: '48px' }}>
-          <Link href="/writing" className="btn btn--ghost" data-cursor="read">
-            ← All Writing
-          </Link>
+          <LiquidSecondaryButton href="/writing" data-cursor="read">
+            All Writing
+          </LiquidSecondaryButton>
           <div className="next-nav-item">
             <Link
               href={`/writing/${nextArticle.slug}`}

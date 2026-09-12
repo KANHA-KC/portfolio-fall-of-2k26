@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import LiquidSecondaryButton from '@/components/ui/liquid-button';
 
 export default function ErrorBoundary({
   error,
@@ -73,9 +74,9 @@ export default function ErrorBoundary({
         >
           Try Again ↺
         </button>
-        <Link href="/" className="btn btn--ghost" data-cursor="view">
+        <LiquidSecondaryButton href="/" data-cursor="view">
           Return Home
-        </Link>
+        </LiquidSecondaryButton>
       </div>
     </main>
   );

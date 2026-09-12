@@ -42,7 +42,15 @@ const firaCode = Fira_Code({
   weight: ['400', '500', '600'],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://kanha-portfolio.vercel.app');
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: '/',
+  },
   title: 'Studio — Designer, Writer, Product Thinker',
   description: 'I turn complex ideas into simple, intuitive experiences.',
   keywords: [

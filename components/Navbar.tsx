@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useToast } from './Toast';
 import EasterEggModal from './EasterEggModal';
 import BrandSignature from './BrandSignature';
+import Switch from '@/components/ui/sky-toggle';
 import { ThemeMode } from '@/lib/types';
 import { liquidGlass } from '@/lib/liquid-glass';
 
@@ -152,27 +153,27 @@ export default function Navbar() {
           </nav>
 
           <div className="nav__actions">
-            <button
-              type="button"
-              className="nav__theme-btn"
-              onClick={cycleTheme}
-              title="Toggle Light / Dark mode"
-              aria-label={`Current theme: ${theme}. Click to switch.`}
+            <div
+              className="nav__theme-toggle-wrap"
+              title={`Current theme: ${theme === 'dark' ? 'Night Mode' : 'Day Sky Mode'}. Click to switch.`}
             >
-              {THEME_LABELS[theme]}
-            </button>
-
-            <button
-              type="button"
-              className="nav__mobile-toggle"
-              aria-label="Toggle navigation"
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              <span />
-              <span />
-              <span />
-            </button>
+              <Switch
+                checked={theme === 'dark'}
+                onChange={(isDark) => {
+                  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+                    try { navigator.vibrate(8); } catch {}
+                  }
+                  const nextTheme: ThemeMode = isDark ? 'dark' : 'light';
+                  setTheme(nextTheme);
+                  document.documentElement.setAttribute('data-theme', nextTheme);
+                  localStorage.setItem('studio_theme', nextTheme);
+                  window.dispatchEvent(new CustomEvent('theme-change', { detail: nextTheme }));
+                  showToast(nextTheme === 'dark' ? 'Dark Mode (Night)' : 'Light Mode (Sky)');
+                }}
+                size="15px"
+                aria-label={`Current theme is ${theme}. Click to switch theme.`}
+              />
+            </div>
           </div>
         </div>
       </header>
