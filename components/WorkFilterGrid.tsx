@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { useGSAP } from '@gsap/react';
 import { Project } from '@/lib/types';
+import { applyLiquidGlass } from '@/lib/liquid-glass';
 
 gsap.registerPlugin(Flip, useGSAP);
 
@@ -17,6 +18,22 @@ export default function WorkFilterGrid({ projects }: WorkFilterGridProps) {
   const [filter, setFilter] = useState<'all' | 'ai' | 'data' | 'healthcare'>('all');
   const containerRef = useRef<HTMLDivElement>(null);
   const flipStateRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const cleanupCards = applyLiquidGlass(
+      containerRef.current.querySelectorAll('.project-card') as NodeListOf<HTMLElement>,
+      { scale: -70, chroma: 4, border: 0.06, mapBlur: 10, blur: 3, saturate: 1.4 }
+    );
+    const cleanupFilters = applyLiquidGlass(
+      containerRef.current.querySelectorAll('.filter-btn') as NodeListOf<HTMLElement>,
+      { scale: -50, chroma: 2.5, border: 0.12, mapBlur: 8, blur: 3, saturate: 1.4 }
+    );
+    return () => {
+      cleanupCards();
+      cleanupFilters();
+    };
+  }, [filter]);
 
   const filteredProjects =
     filter === 'all'

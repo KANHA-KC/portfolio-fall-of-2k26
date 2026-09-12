@@ -52,6 +52,30 @@ const THEME_PRESETS: Record<string, ThemePreset> = {
     rimIntensity: 2.2,
     fallbackStroke: 'rgba(143, 168, 102, 0.35)',
   },
+  v2_light: {
+    sculptureColor: 0x111111,       // Precision Obsidian / Chrome
+    roughness: 0.22,
+    metalness: 0.85,
+    ambientColor: 0xffffff,
+    ambientIntensity: 1.5,
+    keyColor: 0xffffff,
+    keyIntensity: 2.4,
+    rimColor: 0xff0000,             // Bold Red rim (#FF0000)
+    rimIntensity: 2.8,
+    fallbackStroke: 'rgba(255, 0, 0, 0.4)',
+  },
+  v2_dark: {
+    sculptureColor: 0x141414,       // Deep Noir Glass
+    roughness: 0.20,
+    metalness: 0.90,
+    ambientColor: 0x1a1a1a,
+    ambientIntensity: 1.2,
+    keyColor: 0xffffff,
+    keyIntensity: 1.9,
+    rimColor: 0xd2f75a,             // Electric Volt Neon rim (#D2F75A)
+    rimIntensity: 3.0,
+    fallbackStroke: 'rgba(210, 247, 90, 0.45)',
+  },
 };
 
 export default function HeroScene() {
@@ -142,8 +166,21 @@ export default function HeroScene() {
         const targetKeyColor = new THREE.Color(targetPreset.keyColor);
         const targetRimColor = new THREE.Color(targetPreset.rimColor);
 
-        const updateTheme = (themeName: string) => {
-          const preset = THEME_PRESETS[themeName] || THEME_PRESETS.paper;
+        const updateSceneTheme = () => {
+          const themeName =
+            (typeof document !== 'undefined' &&
+              document.documentElement.getAttribute('data-theme')) ||
+            'paper';
+          const versionName =
+            (typeof document !== 'undefined' &&
+              document.documentElement.getAttribute('data-version')) ||
+            'v1';
+
+          let preset = THEME_PRESETS[themeName] || THEME_PRESETS.paper;
+          if (versionName === 'v2') {
+            preset = themeName === 'dark' ? THEME_PRESETS.v2_dark : THEME_PRESETS.v2_light;
+          }
+
           targetPreset = preset;
           targetSculptureColor.setHex(preset.sculptureColor);
           targetAmbientColor.setHex(preset.ambientColor);
@@ -151,29 +188,22 @@ export default function HeroScene() {
           targetRimColor.setHex(preset.rimColor);
         };
 
-        // MutationObserver to watch data-theme attribute on <html>
+        // MutationObserver to watch data-theme and data-version on <html>
         const observer = new MutationObserver((mutations) => {
           for (const m of mutations) {
-            if (m.attributeName === 'data-theme') {
-              const newTheme =
-                document.documentElement.getAttribute('data-theme') || 'paper';
-              updateTheme(newTheme);
+            if (m.attributeName === 'data-theme' || m.attributeName === 'data-version') {
+              updateSceneTheme();
             }
           }
         });
         observer.observe(document.documentElement, {
           attributes: true,
-          attributeFilter: ['data-theme'],
+          attributeFilter: ['data-theme', 'data-version'],
         });
 
-        // Window custom event listener as backup
-        const handleThemeEvent = (e: Event) => {
-          const custom = e as CustomEvent<string>;
-          if (custom.detail) {
-            updateTheme(custom.detail);
-          }
-        };
-        window.addEventListener('theme-change', handleThemeEvent);
+        // Window custom event listeners as backup
+        window.addEventListener('theme-change', updateSceneTheme);
+        window.addEventListener('version-change', updateSceneTheme);
 
         let targetX = 0;
         let targetY = 0;
@@ -260,7 +290,8 @@ export default function HeroScene() {
         cleanupThree = () => {
           if (scrollTriggerInstance) scrollTriggerInstance.kill();
           observer.disconnect();
-          window.removeEventListener('theme-change', handleThemeEvent);
+          window.removeEventListener('theme-change', updateSceneTheme);
+          window.removeEventListener('version-change', updateSceneTheme);
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('resize', onResize);
           cancelAnimationFrame(animationFrameId);
@@ -289,22 +320,33 @@ export default function HeroScene() {
       window.addEventListener('resize', resize);
       resize();
 
-      let currentTheme =
-        (typeof document !== 'undefined' &&
-          document.documentElement.getAttribute('data-theme')) ||
-        'paper';
+      const getCurrentFallbackPreset = () => {
+        const t =
+          (typeof document !== 'undefined' &&
+            document.documentElement.getAttribute('data-theme')) ||
+          'paper';
+        const v =
+          (typeof document !== 'undefined' &&
+            document.documentElement.getAttribute('data-version')) ||
+          'v1';
+        if (v === 'v2') {
+          return t === 'dark' ? 'v2_dark' : 'v2_light';
+        }
+        return t;
+      };
+
+      let currentTheme = getCurrentFallbackPreset();
 
       const observer = new MutationObserver((mutations) => {
         for (const m of mutations) {
-          if (m.attributeName === 'data-theme') {
-            currentTheme =
-              document.documentElement.getAttribute('data-theme') || 'paper';
+          if (m.attributeName === 'data-theme' || m.attributeName === 'data-version') {
+            currentTheme = getCurrentFallbackPreset();
           }
         }
       });
       observer.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['data-theme'],
+        attributeFilter: ['data-theme', 'data-version'],
       });
 
       let angle = 0;

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { liquidGlass } from '@/lib/liquid-glass';
 
 export default function CustomCursor() {
   const [cursorState, setCursorState] = useState<{
@@ -15,16 +16,34 @@ export default function CustomCursor() {
   });
 
   const [isPressed, setIsPressed] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
 
+  // Initialize liquid glass optics on the cursor ring/blob
+  useEffect(() => {
+    if (!ringRef.current) return;
+    const glass = liquidGlass(ringRef.current, {
+      scale: -80,
+      chroma: 4,
+      border: 0.1,
+      mapBlur: 8,
+      blur: 2.5,
+      saturate: 1.6,
+      fallbackBlur: 14,
+    });
+    return () => glass.destroy();
+  }, []);
+
   useEffect(() => {
     if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) {
       return;
     }
+
+    document.documentElement.classList.add('has-custom-cursor');
 
     // Set up optimized GSAP quickTo setters for instant and critically-damped coordinates
     const setDotX = gsap.quickTo(dotRef.current, 'x', { duration: 0.04, ease: 'power1.out' });
@@ -36,7 +55,19 @@ export default function CustomCursor() {
     const setLabelX = gsap.quickTo(labelRef.current, 'x', { duration: 0.18, ease: 'power2.out' });
     const setLabelY = gsap.quickTo(labelRef.current, 'y', { duration: 0.18, ease: 'power2.out' });
 
+    let hasMoved = false;
+
     const onMouseMove = (e: MouseEvent) => {
+      if (!hasMoved) {
+        hasMoved = true;
+        setIsVisible(true);
+        if (dotRef.current && ringRef.current && labelRef.current) {
+          gsap.set([dotRef.current, ringRef.current, labelRef.current], {
+            x: e.clientX,
+            y: e.clientY,
+          });
+        }
+      }
       setDotX(e.clientX);
       setDotY(e.clientY);
       setRingX(e.clientX);
@@ -46,6 +77,13 @@ export default function CustomCursor() {
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+    // Hide/show cursor when mouse exits/enters document viewport
+    const handleDocumentLeave = () => setIsVisible(false);
+    const handleDocumentEnter = () => setIsVisible(true);
+
+    document.addEventListener('mouseleave', handleDocumentLeave);
+    document.addEventListener('mouseenter', handleDocumentEnter);
 
     // Pointer press reactions
     const handleMouseDown = () => setIsPressed(true);
@@ -57,7 +95,7 @@ export default function CustomCursor() {
     // Dynamic delegation for hover states on buttons, links, and interactive elements
     const handleMouseOver = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-cursor], a, button, .btn, .nav__theme-btn'
+        '[data-cursor], a, button, .btn, .nav__theme-btn, .nav__version-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
         const type = target.getAttribute('data-cursor') || 'hover';
@@ -74,7 +112,7 @@ export default function CustomCursor() {
 
     const handleMouseOut = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-cursor], a, button, .btn, .nav__theme-btn'
+        '[data-cursor], a, button, .btn, .nav__theme-btn, .nav__version-btn, input, textarea, select, [role="button"], label, .work-card, .process-card, .orbit__node'
       );
       if (target) {
         setCursorState({
@@ -121,7 +159,10 @@ export default function CustomCursor() {
     document.addEventListener('mouseleave', handleMagneticLeave);
 
     return () => {
+      document.documentElement.classList.remove('has-custom-cursor');
       window.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseleave', handleDocumentLeave);
+      document.removeEventListener('mouseenter', handleDocumentEnter);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseover', handleMouseOver);
@@ -133,6 +174,7 @@ export default function CustomCursor() {
 
   const className = [
     'cursor',
+    isVisible ? 'is-visible' : '',
     cursorState.hovering ? 'is-hovering' : '',
     cursorState.label ? 'has-label' : '',
     cursorState.type ? `cursor--${cursorState.type}` : '',
@@ -146,13 +188,11 @@ export default function CustomCursor() {
       ref={containerRef}
       className={className}
       aria-hidden="true"
-      style={{
-        transform: isPressed ? 'scale(0.82)' : 'scale(1)',
-        transition: 'transform 120ms cubic-bezier(0, 0, 0.2, 1)',
-      }}
     >
+      <div ref={ringRef} className="cursor__ring">
+        <div className="cursor__glass-specular" />
+      </div>
       <div ref={dotRef} className="cursor__dot" />
-      <div ref={ringRef} className="cursor__ring" />
       <div ref={labelRef} className="cursor__label">
         {cursorState.label}
       </div>

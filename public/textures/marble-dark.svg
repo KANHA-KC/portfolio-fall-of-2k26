@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <filter id="marble" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="4" result="turb" />
+      <feDisplacementMap in2="turb" in="SourceGraphic" scale="40" xChannelSelector="R" yChannelSelector="G" result="disp" />
+      <feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1  0 0 0 0.05 0" />
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="none" />
+  <rect width="100%" height="100%" filter="url(#marble)" opacity="0.8" />
+</svg>
